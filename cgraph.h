@@ -32,7 +32,17 @@ class CEdge
 public:
   CEdge(CNode* dst, std::uint32_t weight);
   virtual ~CEdge();
-  
+
+  CNode* node(void)
+  {
+    return m_dst;
+  }
+
+  std::uint32_t weigth(void)
+  {
+    return m_weight;
+  }
+
 protected:
   CNode* m_dst;
   std::uint32_t m_weight;
@@ -43,56 +53,57 @@ class CNode
 public:
   CNode(std::uint32_t index);
   virtual ~CNode();
-  
+
   std::uint32_t number()
   {
     return m_number;
   }
-  
+
+  void displayEdges(void);
   /*
   setName(std::string& name)
   {
-    
+
   }
-  
+
   std::string name()
   {
   }*/
-  
+
 protected:
-  void addEdge(CNode* dst, std::uint32_t weight); 
-  
+  void createEdge(CNode* dst, std::uint32_t weight);
+
 protected:
   std::uint32_t m_number;
   std::vector<CEdge*> m_edges;
-  
+
 private:
 
-  friend CGraph;  
+  friend CGraph;
 };
 
 class CGraph
 {
 public:
-  
+
   typedef enum
   {
     NOT_ORIENTED,
     ORIENTED
   } graphType;
-  
+
   CGraph(graphType type);
   virtual ~CGraph();
-  
-  bool addNode(CNode* node);
+
+  bool insertNode(CNode* node);
   CNode* getNode(std::uint32_t index);
   void addEdge(CNode* src, CNode* dst, std::uint32_t weight);
-  
+
   void display(void);
-  
+
 protected:
   std::vector<CNode*> m_nodeList;
-  
+
 private:
   graphType m_type;
 };

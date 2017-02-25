@@ -30,8 +30,7 @@ CGraph::~CGraph()
 
 }
 
-
-bool CGraph::addNode(CNode* node)
+bool CGraph::insertNode(CNode* node)
 {
   bool rc;
   rc = false;
@@ -47,8 +46,8 @@ CNode* CGraph::getNode(uint32_t index)
 {
   CNode* pFound;
   pFound = nullptr;
-  
-  for (std::uint32_t i= 0; i<m_nodeList.size(); i++)
+
+  for (std::uint32_t i = 0; i < m_nodeList.size(); i++)
   {
     if (m_nodeList.at(i)->number() == index)
     {
@@ -63,11 +62,15 @@ CNode* CGraph::getNode(uint32_t index)
 void CGraph::display(void)
 {
   CNode* pCurrent;
-  
-  for (std::uint32_t i= 0; i<m_nodeList.size(); i++)
+
+  std::cout << "graph" << std::endl;
+
+  for (std::uint32_t i = 0; i < m_nodeList.size(); i++)
   {
     pCurrent = m_nodeList.at(i);
-    std::cout << "Node : " << pCurrent->number() << std::endl;
+    std::cout << pCurrent->number() << " : ";
+    pCurrent->displayEdges();
+    std::cout << std::endl;
   }
 }
 
@@ -77,13 +80,13 @@ void CGraph::addEdge(CNode* src, CNode* dst, uint32_t weight)
   switch (m_type)
   {
     case NOT_ORIENTED:
-      dst->addEdge(src, weight);
-      //break;
-      
+      dst->createEdge(src, weight);
+    //break; no break to build the two edge in case on not oriented graph
+
     case ORIENTED:
-      src->addEdge(dst, weight);
+      src->createEdge(dst, weight);
       break;
-      
+
     default:
       assert(false);
       break;
@@ -101,7 +104,7 @@ CNode::~CNode()
 
 }
 
-void CNode::addEdge(CNode* dst, uint32_t weight)
+void CNode::createEdge(CNode* dst, uint32_t weight)
 {
   CEdge* e = new CEdge(dst, weight);
   m_edges.push_back(e);
@@ -113,6 +116,18 @@ CEdge::CEdge(CNode* dst, std::uint32_t weight)
   m_dst = dst;
   m_weight = weight;
 }
+
+void CNode::displayEdges(void)
+{
+  CEdge* pCurrent;
+
+  for (std::uint32_t i = 0; i < m_edges.size(); i++)
+  {
+    pCurrent = m_edges.at(i);
+    std::cout << pCurrent->node()->number() << " (" << pCurrent->weigth() << ") ";
+  }
+}
+
 
 CEdge::~CEdge()
 {
