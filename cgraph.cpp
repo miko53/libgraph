@@ -19,6 +19,7 @@
 
 #include "cgraph.h"
 #include <iostream>
+#include <stack>
 
 CGraph::CGraph(graphType type)
 {
@@ -93,6 +94,58 @@ void CGraph::addEdge(CNode* src, CNode* dst, uint32_t weight)
   }
 }
 
+
+void CGraph::depthFirstSearchInitialize(std::vector< uint32_t >& visited)
+{
+  visited.clear();
+  visited.resize(m_nodeList.size(), false);
+}
+
+//parcours en profondeur
+void CGraph::depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer)
+{
+  std::stack<CNode*> stack;
+  std::vector<std::uint32_t> indexOfNodeToVisite(m_nodeList.size(), -1);
+  CNode* currentNode;
+
+  assert(start != nullptr);
+
+  currentNode = start;
+  visited[currentNode->number()] = true;
+  if (currentNode->nbSuccessors() > 0)
+  {
+    stack.push(currentNode);
+    indexOfNodeToVisite[currentNode->number()] = 0;
+    observer->action(currentNode);
+  }
+
+  while (stack.empty() == false)
+  {
+    currentNode = stack.top();
+    stack.pop();
+
+    while (indexOfNodeToVisite[currentNode->number()] < currentNode->nbSuccessors())
+    {
+      CNode* nextNode;
+      nextNode = currentNode->successorAt(indexOfNodeToVisite[currentNode->number()]);
+      if (visited[nextNode->number()] == false)
+      {
+        visited[nextNode->number()] = true;
+        stack.push(currentNode);
+        //go to next node
+        CNode* backup = currentNode;
+        currentNode = nextNode;
+        indexOfNodeToVisite[nextNode->number()] = 0;
+        indexOfNodeToVisite[backup->number()]++;
+        observer->action(currentNode);
+      }
+      else
+      {
+        indexOfNodeToVisite[currentNode->number()]++;
+      }
+    }
+  }
+}
 
 CNode::CNode(uint32_t index)
 {

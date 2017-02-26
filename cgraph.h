@@ -59,6 +59,16 @@ public:
     return m_number;
   }
 
+  std::uint32_t nbSuccessors(void)
+  {
+    return m_edges.size();
+  }
+
+  CNode* successorAt(std::uint32_t index)
+  {
+    return m_edges.at(index)->node();
+  }
+
   void displayEdges(void);
   /*
   setName(std::string& name)
@@ -82,6 +92,14 @@ private:
   friend CGraph;
 };
 
+class CGraphObserver
+{
+public:
+  virtual bool action(CNode* c) = 0;
+protected:
+private:
+};
+
 class CGraph
 {
 public:
@@ -100,6 +118,17 @@ public:
   void addEdge(CNode* src, CNode* dst, std::uint32_t weight);
 
   void display(void);
+
+  //parcours en profondeur
+  void depthFirstSearchInitialize(std::vector< uint32_t >& visited);
+  void depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
+
+
+  //parcours en largeur
+  void breadthFirstSearch(void);
+
+
+
 
 protected:
   std::vector<CNode*> m_nodeList;
