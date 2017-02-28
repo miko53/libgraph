@@ -61,26 +61,25 @@ void test_deptFirstSearch(void)
   std::uint32_t i;
   CNode* nodes[10];
 
-  nodes[0] = nullptr;
-  for (i = 1; i < 10; i++)
+  for (i = 0; i < 9; i++)
   {
     nodes[i] = new CNode(i);
     myGraph.insertNode(nodes[i]);
   }
 
-  myGraph.addEdge(nodes[1], nodes[3], 1);
-  myGraph.addEdge(nodes[1], nodes[5], 1);
-  myGraph.addEdge(nodes[1], nodes[6], 1);
-  myGraph.addEdge(nodes[1], nodes[7], 1);
+  myGraph.addEdge(nodes[0], nodes[2], 1);
+  myGraph.addEdge(nodes[0], nodes[4], 1);
+  myGraph.addEdge(nodes[0], nodes[5], 1);
+  myGraph.addEdge(nodes[0], nodes[6], 1);
+  myGraph.addEdge(nodes[1], nodes[0], 1);
   myGraph.addEdge(nodes[2], nodes[1], 1);
-  myGraph.addEdge(nodes[3], nodes[2], 1);
-  myGraph.addEdge(nodes[3], nodes[6], 1);
-  myGraph.addEdge(nodes[4], nodes[2], 1);
-  myGraph.addEdge(nodes[4], nodes[9], 1);
+  myGraph.addEdge(nodes[2], nodes[5], 1);
+  myGraph.addEdge(nodes[3], nodes[1], 1);
+  myGraph.addEdge(nodes[3], nodes[8], 1);
+  myGraph.addEdge(nodes[6], nodes[2], 1);
+  myGraph.addEdge(nodes[7], nodes[1], 1);
   myGraph.addEdge(nodes[7], nodes[3], 1);
-  myGraph.addEdge(nodes[8], nodes[2], 1);
-  myGraph.addEdge(nodes[8], nodes[4], 1);
-  myGraph.addEdge(nodes[8], nodes[5], 1);
+  myGraph.addEdge(nodes[7], nodes[4], 1);
 
   myGraph.display();
 
@@ -89,11 +88,16 @@ void test_deptFirstSearch(void)
   std::cout << "depthFirstSearch" << std::endl;
   std::vector<std::uint32_t> visitedNode;
   myGraph.depthFirstSearchInitialize(visitedNode);
-  visitedNode[0] = true; //doesn't exist
   std::uint32_t next;
   while (isAllNodeVisited(visitedNode, next) == false)
   {
     myGraph.depthFirstSearch(nodes[next], visitedNode, &observer);
   }
 
+  std::cout << "breadthFirstSearch" << std::endl;
+  myGraph.breadthFirstSearchInitialize(visitedNode);
+  while (isAllNodeVisited(visitedNode, next) == false)
+  {
+    myGraph.breadthFirstSearch(nodes[next], visitedNode, &observer);
+  }
 }

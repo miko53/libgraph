@@ -20,6 +20,7 @@
 #include "cgraph.h"
 #include <iostream>
 #include <stack>
+#include <queue>
 
 CGraph::CGraph(graphType type)
 {
@@ -94,11 +95,16 @@ void CGraph::addEdge(CNode* src, CNode* dst, uint32_t weight)
   }
 }
 
-
-void CGraph::depthFirstSearchInitialize(std::vector< uint32_t >& visited)
+void CGraph::initializeVisitedVector(std::vector< uint32_t >& visited)
 {
   visited.clear();
   visited.resize(m_nodeList.size(), false);
+}
+
+
+void CGraph::depthFirstSearchInitialize(std::vector< uint32_t >& visited)
+{
+  initializeVisitedVector(visited);
 }
 
 //parcours en profondeur
@@ -146,6 +152,41 @@ void CGraph::depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited,
     }
   }
 }
+
+
+void CGraph::breadthFirstSearchInitialize(std::vector< uint32_t >& visited)
+{
+  initializeVisitedVector(visited);
+}
+
+void CGraph::breadthFirstSearch(CNode* start, std::vector< uint32_t >& visited, CGraphObserver* observer)
+{
+  std::queue<CNode*> fifo;
+  CNode* currentNode;
+  CNode* nNode;
+  std::uint32_t i;
+
+  currentNode = start;
+  visited[currentNode->number()] = true;
+  observer->action(currentNode);
+  fifo.push(currentNode);
+  while (!fifo.empty())
+  {
+    currentNode = fifo.front();
+    fifo.pop();
+    for (i = 0; i < currentNode->nbSuccessors(); i++)
+    {
+      nNode = currentNode->successorAt(i);
+      if (visited[nNode->number()] == false)
+      {
+        visited[nNode->number()] = true;
+        observer->action(nNode);
+        fifo.push(nNode);
+      }
+    }
+  }
+}
+
 
 CNode::CNode(uint32_t index)
 {

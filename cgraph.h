@@ -123,12 +123,12 @@ public:
   void depthFirstSearchInitialize(std::vector< uint32_t >& visited);
   void depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
 
-
   //parcours en largeur
-  void breadthFirstSearch(void);
+  void breadthFirstSearchInitialize(std::vector< uint32_t >& visited);
+  void breadthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
 
-
-
+private:
+  void initializeVisitedVector(std::vector< uint32_t >& visited);
 
 protected:
   std::vector<CNode*> m_nodeList;
