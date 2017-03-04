@@ -21,8 +21,9 @@
 #define CGRAPH_H
 
 #include <cstdint>
-#include <vector>
 #include <cassert>
+#include <vector>
+#include <list>
 
 class CGraph;
 class CNode;
@@ -67,6 +68,11 @@ public:
   CNode* successorAt(std::uint32_t index)
   {
     return m_edges.at(index)->node();
+  }
+
+  std::uint32_t weigthAt(std::uint32_t index)
+  {
+    return m_edges.at(index)->weigth();
   }
 
   void displayEdges(void);
@@ -117,6 +123,12 @@ public:
   CNode* getNode(std::uint32_t index);
   void addEdge(CNode* src, CNode* dst, std::uint32_t weight);
 
+  std::uint32_t nodeNumber()
+  {
+    return m_nodeList.size();
+  }
+
+  //debug
   void display(void);
 
   //parcours en profondeur
@@ -127,8 +139,13 @@ public:
   void breadthFirstSearchInitialize(std::vector< uint32_t >& visited);
   void breadthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
 
+  //recherche du chemin le plus court (Dijkstra)
+  void bestShortPathSearch(CNode* start, std::vector<std::uint32_t>& dist, std::vector<CNode*>& father);
+
 private:
   void initializeVisitedVector(std::vector< uint32_t >& visited);
+  std::uint32_t cost(CNode* s, CNode* e);
+  CNode* selectMin(std::list<CNode*>& m, std::vector< uint32_t >& dist);
 
 protected:
   std::vector<CNode*> m_nodeList;

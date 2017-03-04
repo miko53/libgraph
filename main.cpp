@@ -13,11 +13,14 @@ bool CGraphDisplayObserver::action(CNode* c)
 }
 
 void test_deptFirstSearch(void);
+void test_bestPathSearch(void);
 
 
 int main(int argc, char** argv)
 {
   test_deptFirstSearch();
+  test_bestPathSearch();
+
   /*
   CGraph myGraph(CGraph::NOT_ORIENTED);
 
@@ -99,5 +102,60 @@ void test_deptFirstSearch(void)
   while (isAllNodeVisited(visitedNode, next) == false)
   {
     myGraph.breadthFirstSearch(nodes[next], visitedNode, &observer);
+  }
+}
+
+
+void test_bestPathSearch(void)
+{
+  CGraph myGraph(CGraph::ORIENTED);
+  std::uint32_t i;
+  CNode* nodes[6];
+
+  for (i = 0; i < 6; i++)
+  {
+    nodes[i] = new CNode(i);
+    myGraph.insertNode(nodes[i]);
+  }
+
+  myGraph.addEdge(nodes[0], nodes[1], 10);
+  myGraph.addEdge(nodes[0], nodes[2], 3);
+  myGraph.addEdge(nodes[0], nodes[4], 6);
+  myGraph.addEdge(nodes[1], nodes[0], 0);
+  myGraph.addEdge(nodes[2], nodes[1], 4);
+  myGraph.addEdge(nodes[2], nodes[4], 2);
+  myGraph.addEdge(nodes[3], nodes[2], 1);
+  myGraph.addEdge(nodes[3], nodes[4], 3);
+  myGraph.addEdge(nodes[4], nodes[1], 0);
+  myGraph.addEdge(nodes[4], nodes[5], 1);
+  myGraph.addEdge(nodes[5], nodes[0], 2);
+  myGraph.addEdge(nodes[5], nodes[1], 1);
+
+  myGraph.display();
+  std::vector<std::uint32_t> distance;
+  std::vector<CNode*> father;
+
+
+  myGraph.bestShortPathSearch(nodes[0], distance, father);
+
+  std::cout << "vector" << std::endl;
+  std::uint32_t index;
+  for (index = 0; index < 6; index++)
+  {
+    std::cout << distance[index] << std::endl;
+  }
+
+  std::cout << "father" << std::endl;
+  for (index = 0; index < 6; index++)
+  {
+    std::cout << index << "-->";
+    if (father[index] != nullptr)
+    {
+      std::cout << (father[index])->number() << std::endl;
+    }
+    else
+    {
+      std::cout << "nullptr" << std::endl;
+    }
   }
 }

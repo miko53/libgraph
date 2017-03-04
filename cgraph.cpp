@@ -21,6 +21,7 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <list>
 
 CGraph::CGraph(graphType type)
 {
@@ -186,6 +187,103 @@ void CGraph::breadthFirstSearch(CNode* start, std::vector< uint32_t >& visited, 
     }
   }
 }
+
+void CGraph::bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, std::vector< CNode* >& father)
+{
+  std::list<CNode*> m;
+  CNode* selectNode;
+
+  dist.clear();
+  dist.resize(m_nodeList.size(), UINT32_MAX);
+  father.clear();
+  father.resize(m_nodeList.size(), nullptr);
+
+  for (std::uint32_t i = 0; i < m_nodeList.size(); i++)
+  {
+    father[i] = start;
+    if (m_nodeList.at(i) != start)
+    {
+      m.push_back(m_nodeList.at(i));
+    }
+
+    dist[m_nodeList.at(i)->number()] = cost(start, m_nodeList.at(i));
+  }
+
+  while (!m.empty())
+  {
+    selectNode = selectMin(m, dist);
+    if (selectNode == nullptr)
+    {
+      break;
+    }
+    else
+    {
+      m.remove(selectNode);
+
+      for (std::uint32_t i = 0; i < selectNode->nbSuccessors(); i++)
+      {
+        CNode* current = selectNode->successorAt(i);
+        std::list<CNode*>::iterator it;
+        for (it = m.begin(); it != m.end(); ++it)
+        {
+          if (*it == current)
+          {
+            std::uint32_t v = dist[selectNode->number()] + cost(selectNode, current);
+            if (v < dist[current->number()])
+            {
+              dist[current->number()] = v;
+              father[current->number()] = selectNode;
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+
+uint32_t CGraph::cost(CNode* s, CNode* e)
+{
+  std::uint32_t i;
+  std::uint32_t rc;
+  rc = UINT32_MAX;
+
+  if (s == e)
+  {
+    rc = 0;
+  }
+  else
+    for (i = 0; i < s->nbSuccessors(); i++)
+    {
+      if (s->successorAt(i) == e)
+      {
+        rc = s->weigthAt(i);
+      }
+    }
+
+  return rc;
+}
+
+CNode* CGraph::selectMin(std::list< CNode* >& m, std::vector< uint32_t >& dist)
+{
+  std::uint32_t minValue;
+  CNode* minNode;
+
+  minNode = nullptr;
+  minValue = UINT32_MAX;
+
+  for (std::list<CNode*>::iterator it = m.begin(); it != m.end(); ++it)
+  {
+    if (dist[(*it)->number()] < minValue)
+    {
+      minNode = *it;
+      minValue = dist[(*it)->number()];
+    }
+  }
+
+  return minNode;
+}
+
 
 
 CNode::CNode(uint32_t index)
