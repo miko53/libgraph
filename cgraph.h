@@ -140,7 +140,8 @@ public:
   void breadthFirstSearch(CNode* start, std::vector<bool>& visited, CGraphObserver* observer);
 
   //recherche du chemin le plus court (Dijkstra)
-  void bestShortPathSearch(CNode* start, std::vector<std::uint32_t>& dist, std::vector<CNode*>& father);
+  void bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, std::vector< CNode* >& father,
+                           CNode* end = nullptr);
 
 private:
   void initializeVisitedVector(std::vector< bool >& visited);

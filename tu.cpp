@@ -193,3 +193,81 @@ TEST_CASE("check best short path algo", "[Dijkstra algo]")
   }
   REQUIRE(fatherByNumber == fatherResult);
 }
+
+TEST_CASE("check best short not oriented graph with stop at intermediate node", "[Dijkstra algo]")
+{
+  std::cout << "test start" << std::endl;
+  CGraph myGraph(CGraph::NOT_ORIENTED);
+  std::uint32_t i;
+  CNode* nodeA = new CNode(0);
+  CNode* nodeB = new CNode(1);
+  CNode* nodeC = new CNode(2);
+  CNode* nodeD = new CNode(3);
+  CNode* nodeE = new CNode(4);
+  CNode* nodeF = new CNode(5);
+  CNode* nodeG = new CNode(6);
+  CNode* nodeH = new CNode(7);
+  CNode* nodeI = new CNode(8);
+  CNode* nodeJ = new CNode(9);
+
+  myGraph.insertNode(nodeA);
+  myGraph.insertNode(nodeB);
+  myGraph.insertNode(nodeC);
+  myGraph.insertNode(nodeD);
+  myGraph.insertNode(nodeE);
+  myGraph.insertNode(nodeF);
+  myGraph.insertNode(nodeG);
+  myGraph.insertNode(nodeH);
+  myGraph.insertNode(nodeI);
+  myGraph.insertNode(nodeJ);
+
+  myGraph.addEdge(nodeA, nodeB, 85);
+  myGraph.addEdge(nodeA, nodeC, 217);
+  myGraph.addEdge(nodeA, nodeE, 173);
+  myGraph.addEdge(nodeB, nodeF, 80);
+  myGraph.addEdge(nodeC, nodeG, 186);
+  myGraph.addEdge(nodeC, nodeH, 103);
+  myGraph.addEdge(nodeD, nodeH, 183);
+  myGraph.addEdge(nodeE, nodeJ, 502);
+  myGraph.addEdge(nodeF, nodeI, 250);
+  myGraph.addEdge(nodeH, nodeJ, 167);
+  myGraph.addEdge(nodeI, nodeJ, 84);
+
+  myGraph.display();
+  std::vector<std::uint32_t> distance;
+  //std::vector<std::uint32_t> distanceResult = { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
+  std::vector<std::uint32_t> distanceResult = { 0, 85, 217, UINT32_MAX, 173, 165, 403, 320, 415, 675 };
+  std::vector<CNode*> father;
+  std::vector<std::uint32_t> fatherByNumber;
+  //std::vector<std::uint32_t> fatherResult = { 0, 0, 0, 7, 0, 1, 2, 2, 5, 7};
+  std::vector<std::uint32_t> fatherResult = { 0, 0, 0, 0, 0, 1, 2, 2, 5, 4};
+
+
+  myGraph.bestShortPathSearch(nodeA, distance, father, nodeH);
+
+
+  std::cout << "distanceB" << std::endl;
+  std::uint32_t index;
+  for (index = 0; index < distance.size(); index++)
+  {
+    std::cout << distance[index] << std::endl;
+  }
+
+  REQUIRE(distance == distanceResult);
+
+  std::cout << "father" << std::endl;
+  for (index = 0; index < father.size(); index++)
+  {
+    fatherByNumber.push_back((father[index])->number());
+    if (father[index] != nullptr)
+    {
+      std::cout << (father[index])->number() << std::endl;
+    }
+    else
+    {
+      std::cout << "nullptr" << std::endl;
+    }
+  }
+
+  REQUIRE(fatherByNumber == fatherResult);
+}

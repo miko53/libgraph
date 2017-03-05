@@ -188,7 +188,7 @@ void CGraph::breadthFirstSearch(CNode* start, std::vector< bool >& visited, CGra
   }
 }
 
-void CGraph::bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, std::vector< CNode* >& father)
+void CGraph::bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, std::vector< CNode* >& father, CNode* end)
 {
   std::list<CNode*> m;
   CNode* selectNode;
@@ -212,7 +212,9 @@ void CGraph::bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, st
   while (!m.empty())
   {
     selectNode = selectMin(m, dist);
-    if (selectNode == nullptr)
+    // if no more node available, or we are reached the end of search
+    if ((selectNode == nullptr) ||
+        (selectNode != nullptr && (selectNode == end)))
     {
       break;
     }
@@ -238,6 +240,7 @@ void CGraph::bestShortPathSearch(CNode* start, std::vector< uint32_t >& dist, st
           }
         }
       }
+
     }
   }
 }
