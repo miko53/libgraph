@@ -132,18 +132,18 @@ public:
   void display(void);
 
   //parcours en profondeur
-  void depthFirstSearchInitialize(std::vector< uint32_t >& visited);
-  void depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
+  void depthFirstSearchInitialize(std::vector< bool >& visited);
+  void depthFirstSearch(CNode* start, std::vector<bool>& visited, CGraphObserver* observer);
 
   //parcours en largeur
-  void breadthFirstSearchInitialize(std::vector< uint32_t >& visited);
-  void breadthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer);
+  void breadthFirstSearchInitialize(std::vector< bool >& visited);
+  void breadthFirstSearch(CNode* start, std::vector<bool>& visited, CGraphObserver* observer);
 
   //recherche du chemin le plus court (Dijkstra)
   void bestShortPathSearch(CNode* start, std::vector<std::uint32_t>& dist, std::vector<CNode*>& father);
 
 private:
-  void initializeVisitedVector(std::vector< uint32_t >& visited);
+  void initializeVisitedVector(std::vector< bool >& visited);
   std::uint32_t cost(CNode* s, CNode* e);
   CNode* selectMin(std::list<CNode*>& m, std::vector< uint32_t >& dist);
 

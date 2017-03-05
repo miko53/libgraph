@@ -96,20 +96,20 @@ void CGraph::addEdge(CNode* src, CNode* dst, uint32_t weight)
   }
 }
 
-void CGraph::initializeVisitedVector(std::vector< uint32_t >& visited)
+void CGraph::initializeVisitedVector(std::vector< bool >& visited)
 {
   visited.clear();
   visited.resize(m_nodeList.size(), false);
 }
 
 
-void CGraph::depthFirstSearchInitialize(std::vector< uint32_t >& visited)
+void CGraph::depthFirstSearchInitialize(std::vector< bool >& visited)
 {
   initializeVisitedVector(visited);
 }
 
 //parcours en profondeur
-void CGraph::depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited, CGraphObserver* observer)
+void CGraph::depthFirstSearch(CNode* start, std::vector<bool>& visited, CGraphObserver* observer)
 {
   std::stack<CNode*> stack;
   std::vector<std::uint32_t> indexOfNodeToVisite(m_nodeList.size(), -1);
@@ -155,12 +155,12 @@ void CGraph::depthFirstSearch(CNode* start, std::vector<std::uint32_t>& visited,
 }
 
 
-void CGraph::breadthFirstSearchInitialize(std::vector< uint32_t >& visited)
+void CGraph::breadthFirstSearchInitialize(std::vector< bool >& visited)
 {
   initializeVisitedVector(visited);
 }
 
-void CGraph::breadthFirstSearch(CNode* start, std::vector< uint32_t >& visited, CGraphObserver* observer)
+void CGraph::breadthFirstSearch(CNode* start, std::vector< bool >& visited, CGraphObserver* observer)
 {
   std::queue<CNode*> fifo;
   CNode* currentNode;
